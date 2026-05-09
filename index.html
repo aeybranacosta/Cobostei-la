@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tornado Template Maker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; color: white; text-align: center; }
+        .container { margin-top: 50px; }
+        
+        /* The Template Canvas */
+        #tornado-canvas {
+            width: 400px;
+            height: 500px;
+            background: #fff; /* White background for Ibis Paint transparency removal */
+            margin: 20px auto;
+            position: relative;
+            border: 5px solid #bdc3c7;
+            overflow: hidden;
+        }
+
+        .tornado-shape {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            clip-path: polygon(20% 0%, 80% 0%, 60% 100%, 40% 100%);
+            transition: all 0.3s ease;
+        }
+
+        /* Controls */
+        .controls { background: #34495e; padding: 20px; display: inline-block; border-radius: 10px; }
+        select, input, button { padding: 10px; margin: 10px; border-radius: 5px; border: none; cursor: pointer; }
+        button { background: #e67e22; color: white; font-weight: bold; }
+        button:hover { background: #d35400; }
+    </style>
+</head>
+<body>
+
+    <h1>🌪️ Tornado Template Creator</h1>
+    <p>Choose your intensity and base color, then hit download for Ibis Paint!</p>
+
+    <div class="controls">
+        <label>Scale: </label>
+        <select id="ef-scale" onchange="updateTornado()">
+            <option value="ef1">EF1 (Thin/Rope)</option>
+            <option value="ef2">EF2 (Cone)</option>
+            <option value="ef3">EF3 (Strong Cone)</option>
+            <option value="ef4">EF4 (Wedge)</option>
+            <option value="ef5">EF5 (Monster Wedge)</option>
+            <option value="ef6">EF6 (Inconceivable)</option>
+        </select>
+
+        <label>Base Color: </label>
+        <input type="color" id="color-picker" value="#888888" onchange="updateTornado()">
+        
+        <br>
+        <button onclick="downloadTemplate()">Download Template</button>
+    </div>
+
+    <div id="tornado-canvas">
+        <div id="tornado" class="tornado-shape"></div>
+    </div>
+
+    <script>
+        function updateTornado() {
+            const scale = document.getElementById('ef-scale').value;
+            const color = document.getElementById('color-picker').value;
+            const tornado = document.getElementById('tornado');
+
+            tornado.style.backgroundColor = color;
+
+            // Adjust width and height based on EF Scale
+            switch(scale) {
+                case 'ef1': tornado.style.width = '40px'; tornado.style.height = '300px'; break;
+                case 'ef2': tornado.style.width = '100px'; tornado.style.height = '350px'; break;
+                case 'ef3': tornado.style.width = '180px'; tornado.style.height = '400px'; break;
+                case 'ef4': tornado.style.width = '250px'; tornado.style.height = '420px'; break;
+                case 'ef5': tornado.style.width = '350px'; tornado.style.height = '450px'; break;
+                case 'ef6': tornado.style.width = '450px'; tornado.style.height = '480px'; break;
+            }
+        }
+
+        function downloadTemplate() {
+            const canvas = document.getElementById('tornado-canvas');
+            html2canvas(canvas).then(image => {
+                const link = document.createElement('a');
+                link.download = 'tornado-template.png';
+                link.href = image.toDataURL();
+                link.click();
+            });
+        }
+
+        // Initialize
+        updateTornado();
+    </script>
+</body>
+</html>
+
